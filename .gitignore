@@ -1,2 +1,6 @@
-# Ignora todos los ejecutables
-*.exe
+# Ignora la carpeta de configuración de Visual Studio
+.vs/
+
+# Ignora las carpetas BIN y OBJ
+bin/
+obj/
