@@ -2,6 +2,8 @@
 {
     internal class Board
     {
+        private static readonly log4net.ILog logger = log4net.LogManager
+            .GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public const int MAX_COORD = 10;
         public const int MIN_COORD = 1;
         public List<Ship> ships;
@@ -11,6 +13,7 @@
         {
             ships = new();
             shots = new();
+            logger.Info("Board created");
         }
 
         public bool AddShip(Ship ship)
@@ -18,14 +21,18 @@
             if (ship.Fragments.Any(f => f.Position.x > MAX_COORD || f.Position.x < MIN_COORD ||
                 f.Position.y > MAX_COORD || f.Position.y < MIN_COORD))
             {
+                logger.Error("Invalid coordinates! (Out of bounds)");
                 return false;
             }
             if (ships.Any(s => s.CheckCollision(ship))) 
             {
+                logger.Error("Invalid coordinates! (There's already another ship in there)");
                 return false; 
             }
 
             ships.Add(ship);
+
+            logger.Info("Ship added successfully");
 
             return true;
         }
@@ -35,11 +42,13 @@
             if (shot.Position.x > MAX_COORD || shot.Position.x < MIN_COORD ||
                 shot.Position.y > MAX_COORD || shot.Position.y < MIN_COORD)
             {
+                logger.Error("Invalid coordinates! (Out of bounds)");
                 return false;
             }
 
             if (ships.Any(s => s.Fragments.Any(f => f.Position == shot.Position && f.Destroyed))) 
             {
+                logger.Error("Invalid coordinates! (There's already a shot in there)");
                 return false;
             }
             else if (ships.Any(s => s.Fragments.Any(f => f.Position == shot.Position))) {
@@ -54,9 +63,13 @@
                 }
             }
 
+            logger.Info(string.Format("Fire! {0}", shot.HasHit ? "It hit!" : "It missed..."));
+
             ships.ForEach(s => s.CheckStatus());
 
             shots.Add(shot);
+
+            logger.Info("Shot added successfully");
 
             return true;
         }

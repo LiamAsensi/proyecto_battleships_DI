@@ -4,6 +4,9 @@ namespace BattleshipsProto
 {
     internal class Ship
     {
+        private static readonly log4net.ILog logger = log4net.LogManager
+            .GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private Direction direction;
         private ShipFragment[] fragments;
         private bool destroyed;
@@ -19,6 +22,8 @@ namespace BattleshipsProto
             destroyed = false;
 
             AssignCoords(initialCoord);
+
+            logger.Info($"Ship created: {ToString()}");
         }
 
         private void AssignCoords(Coords coords)
@@ -34,7 +39,15 @@ namespace BattleshipsProto
 
         public void CheckStatus()
         {
-            destroyed = fragments.ToList().All(f => f.Destroyed);
+            if (!destroyed)
+            {
+                destroyed = fragments.ToList().All(f => f.Destroyed);
+
+                if (destroyed)
+                {
+                    logger.Info($"Status: {ToString()}");
+                }
+            }
         }
 
         public bool CheckCollision(Ship ship)

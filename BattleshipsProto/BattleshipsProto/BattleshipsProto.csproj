@@ -13,4 +13,13 @@
     <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="All.log">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

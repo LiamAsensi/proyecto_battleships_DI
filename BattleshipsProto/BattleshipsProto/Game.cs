@@ -2,6 +2,8 @@
 {
     internal class Game
     {
+        private static readonly log4net.ILog logger = log4net.LogManager
+            .GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private Board playerBoard;
         private Board enemyBoard;
         private GUI userInterface;
@@ -42,14 +44,18 @@
 
             Console.SetCursorPosition(0, 15);
             Console.WriteLine(playerBoard.CheckDefeatStatus() ? "Has perdido..." : "¡Has ganado!");
+            logger.Info(string.Format("{0}", 
+                playerBoard.CheckDefeatStatus() ? "The player won" : "The enemy won"));
         }
 
         private void InitialTurn()
         {
+            logger.Info("Starting the initial turn");
             int shipNum = 1;
             sizes.ToList().ForEach(s => AddShip(s, shipNum++));
             AddEnemyShips();
             userInterface.Clear();
+            logger.Info("Ending the initial turn");
         }
 
         private void AddShip(ShipSize size, int shipNum)
@@ -57,6 +63,7 @@
             Coords? crds;
             bool added;
 
+            logger.Info("Asking for direction");
             Direction dir = GUI.AskDirection();
             userInterface.Clear();
 
@@ -64,12 +71,14 @@
             {
                 do
                 {
+                    logger.Info("Asking for coordinates");
                     crds = GUI.AskCoordinates($"Coordenadas del barco {shipNum}");
 
                     if (crds is null)
                     {
                         Console.SetCursorPosition(0, 16);
                         Console.Error.WriteLine("Coordenadas inválidas");
+                        logger.Error("Invalid format of coordinates");
                     }
                 } while (crds is null);
 
@@ -91,6 +100,7 @@
 
         private void AddEnemyShips()
         {
+            logger.Info("Adding the enemy ships...");
             var rand = new Random();
 
             foreach (var size in sizes)
@@ -117,12 +127,14 @@
             {
                 do
                 {
+                    logger.Info("Asking for coordinates");
                     crds = GUI.AskCoordinates($"Coordenadas del disparo");
 
                     if (crds is null)
                     {
                         Console.SetCursorPosition(0, 16);
                         Console.Error.WriteLine("Coordenadas inválidas");
+                        logger.Error("Invalid format of coordinates");
                     }
                 } while (crds is null);
 
@@ -130,6 +142,7 @@
 
                 shot = new((Coords)crds);
 
+                logger.Info("Adding player shot...");
                 added = enemyBoard.AddShot(shot);
 
                 if (!added)
@@ -140,6 +153,7 @@
             } while (!added);
 
             userInterface.Clear();
+            
 
             return enemyBoard.ships.Any(sp => sp.Fragments.Any(f => f.Position == shot.Position));
         }
@@ -154,9 +168,10 @@
             {
                 shot = new(new Coords(rand.Next(0, 10), rand.Next(0, 10)));
 
+                logger.Info("Adding enemy shot...");
                 added = playerBoard.AddShot(shot);
             } while (!added);
-
+            
             userInterface.Clear();
 
             return playerBoard.ships.Any(sp => sp.Fragments.Any(f => f.Position == shot.Position));
