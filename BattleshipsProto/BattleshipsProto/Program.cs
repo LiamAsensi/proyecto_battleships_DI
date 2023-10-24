@@ -1,4 +1,6 @@
-﻿namespace BattleshipsProto
+﻿[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config")]
+
+namespace BattleshipsProto
 {
     internal class Program
     {
