@@ -20,7 +20,8 @@
         private void DrawBoard(Board board, int x, int y, bool player)
         {
             Console.SetCursorPosition(x + 3, y - 1);
-            Console.Write(player ? "JUGADOR" : "ENEMIGO");
+            Console.Write(player ? 
+                Program.Resources.GetString("player_table") : Program.Resources.GetString("enemy_table"));
             DrawBasicUI(x, y);
 
             DrawShots(board.shots, x, y);
@@ -88,7 +89,7 @@
             ConsoleKeyInfo key;
 
             Console.SetCursorPosition(0, 15);
-            Console.WriteLine("Dirección del barco: [H] Horizontal  [V] Vertical");
+            Console.WriteLine(Program.Resources.GetString("ship_direction"));
 
             do
             {

@@ -4,6 +4,7 @@
     {
         private static readonly log4net.ILog logger = log4net.LogManager
             .GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public const int MAX_COORD = 10;
         public const int MIN_COORD = 1;
         public List<Ship> ships;

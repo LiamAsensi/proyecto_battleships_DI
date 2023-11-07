@@ -43,9 +43,10 @@
             } while (!gameEnded);
 
             Console.SetCursorPosition(0, 15);
-            Console.WriteLine(playerBoard.CheckDefeatStatus() ? "Has perdido..." : "¡Has ganado!");
+            Console.WriteLine(playerBoard.CheckDefeatStatus() ? 
+                Program.Resources.GetString("defeat_mes"): Program.Resources.GetString("win_mes"));
             logger.Info(string.Format("{0}", 
-                playerBoard.CheckDefeatStatus() ? "The player won" : "The enemy won"));
+                playerBoard.CheckDefeatStatus() ? "The enemy won" : "The player won"));
         }
 
         private void InitialTurn()
@@ -72,12 +73,12 @@
                 do
                 {
                     logger.Info("Asking for coordinates");
-                    crds = GUI.AskCoordinates($"Coordenadas del barco {shipNum}");
+                    crds = GUI.AskCoordinates(string.Format(Program.Resources.GetString("ask_coords_ship_mes"), shipNum));
 
                     if (crds is null)
                     {
                         Console.SetCursorPosition(0, 16);
-                        Console.Error.WriteLine("Coordenadas inválidas");
+                        Console.Error.WriteLine(Program.Resources.GetString("format_coords_error"));
                         logger.Error("Invalid format of coordinates");
                     }
                 } while (crds is null);
@@ -91,7 +92,7 @@
                 if (!added)
                 {
                     Console.SetCursorPosition(0, 16);
-                    Console.Error.WriteLine("La posición es inválida");
+                    Console.Error.WriteLine(Program.Resources.GetString("invalid_coords_error"));
                 }
             } while (!added);
 
@@ -128,12 +129,12 @@
                 do
                 {
                     logger.Info("Asking for coordinates");
-                    crds = GUI.AskCoordinates($"Coordenadas del disparo");
+                    crds = GUI.AskCoordinates(Program.Resources.GetString("ask_coords_shot_mes"));
 
                     if (crds is null)
                     {
                         Console.SetCursorPosition(0, 16);
-                        Console.Error.WriteLine("Coordenadas inválidas");
+                        Console.Error.WriteLine(Program.Resources.GetString("format_coords_error"));
                         logger.Error("Invalid format of coordinates");
                     }
                 } while (crds is null);
@@ -148,7 +149,7 @@
                 if (!added)
                 {
                     Console.SetCursorPosition(0, 16);
-                    Console.Error.WriteLine("La posición es inválida");
+                    Console.Error.WriteLine(Program.Resources.GetString("invalid_coords_error"));
                 }
             } while (!added);
 
